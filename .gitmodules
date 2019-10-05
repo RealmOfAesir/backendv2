@@ -41,3 +41,6 @@
 [submodule "external/concurrentqueue"]
 	path = external/concurrentqueue
 	url = https://github.com/cameron314/concurrentqueue.git
+[submodule "assets"]
+	path = assets
+	url = https://github.com/RealmOfAesir/assets.git
