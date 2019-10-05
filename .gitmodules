@@ -32,9 +32,6 @@
 [submodule "external/pcg-cpp"]
 	path = external/pcg-cpp
 	url = https://github.com/imneme/pcg-cpp.git
-[submodule "assets"]
-	path = assets
-	url = https://github.com/RealmOfAesir/assets.git
 [submodule "external/websocketpp"]
 	path = external/websocketpp
 	url = https://github.com/zaphoyd/websocketpp.git
