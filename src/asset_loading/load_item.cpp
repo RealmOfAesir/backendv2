@@ -1,5 +1,5 @@
 /*
-    Land of the Rair
+    Realm of Aesir
     Copyright (C) 2019  Michael de Lang
 
     This program is free software: you can redistribute it and/or modify
@@ -17,34 +17,34 @@
 */
 
 #include "load_item.h"
-#include <yaml-cpp/yaml.h>
+#include <rapidjson/document.h>
 #include <working_directory_manipulation.h>
 #include "spdlog/spdlog.h"
 
 using namespace std;
+using namespace rapidjson;
 using namespace lotr;
-
-#define EFFECT_STRING_FIELD(x) if(item_node["effect"][ #x ]) { effect. x = item_node["effect"][ #x ].as<string>(); }
-#define EFFECT_UINT_FIELD(x) if(item_node["effect"][ #x ]) { effect. x = item_node["effect"][ #x ].as<uint32_t>(); }
-#define EFFECT_BOOL_FIELD(x) if(item_node["effect"][ #x ]) { effect. x = item_node["effect"][ #x ].as<bool>(); }
-
-#define ITEM_STRING_FIELD(x) if(item_node[ #x ]) { item. x = item_node[ #x ].as<string>(); }
-#define ITEM_UINT_FIELD(x) if(item_node[ #x ]) { item. x = item_node[ #x ].as<uint32_t>(); }
-#define ITEM_BOOL_FIELD(x) if(item_node[ #x ]) { item. x = item_node[ #x ].as<bool>(); }
 
 vector<global_item_component> lotr::load_global_items_from_file(string const &file) {
     spdlog::debug("[{}] loading items from file {}", __FUNCTION__, file);
-
     auto env_contents = read_whole_file(file);
 
     if(!env_contents) {
         return {};
     }
 
-    YAML::Node tree = YAML::Load(env_contents.value());
+    Document d;
+    d.Parse(env_contents->c_str(), env_contents->size());
+
+    if (d.HasParseError() || !d.IsArray()) {
+        spdlog::error("[{}] deserialize {} failed", __FUNCTION__, file);
+        return {};
+    }
 
     vector<global_item_component> items;
-    for(auto const &item_node : tree) {
+    items.reserve(d.Size());
+    for(SizeType i = 0; i < d.Size(); i++) {
+        auto &current_item = d[i];
         global_item_component item{};
         item.name = item_node["name"].as<string>();
         item.desc = item_node["desc"].as<string>();

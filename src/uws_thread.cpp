@@ -1,5 +1,5 @@
 /*
-    Land of the Rair
+    Realm of Aesir
     Copyright (C) 2019 Michael de Lang
 
     This program is free software: you can redistribute it and/or modify
@@ -267,41 +267,41 @@ thread lotr::run_uws(config const &config, shared_ptr<database_pool> pool, serve
     motd = "";
 
     auto t = thread([&config, pool, &s_handle, &quit] {
-        server rair_server;
-        s_handle.s = &rair_server;
+        server roa_server;
+        s_handle.s = &roa_server;
 
         message_router_type message_router;
         add_routes(message_router);
 
         try {
             // Set logging settings
-            //rair_server.set_access_channels(websocketpp::log::alevel::none);
-            rair_server.clear_access_channels(websocketpp::log::alevel::all);
+            //roa_server.set_access_channels(websocketpp::log::alevel::none);
+            roa_server.clear_access_channels(websocketpp::log::alevel::all);
 
             // Initialize ASIO
-            rair_server.init_asio();
-            rair_server.set_reuse_addr(true);
+            roa_server.init_asio();
+            roa_server.set_reuse_addr(true);
 
             // Register our message handler
-            rair_server.set_message_handler(bind(&on_message, pool, message_router, &rair_server, ::_1, ::_2));
+            roa_server.set_message_handler(bind(&on_message, pool, message_router, &roa_server, ::_1, ::_2));
 
-            rair_server.set_fail_handler(bind(&on_fail, &rair_server, ::_1));
-            rair_server.set_open_handler(bind(&on_open, cref(quit), ::_1));
-            rair_server.set_close_handler(bind(&on_close, &rair_server, ::_1));
-            rair_server.set_tls_init_handler(bind(&on_tls_init,MOZILLA_INTERMEDIATE,::_1));
-            rair_server.set_pong_timeout(2500);
-            rair_server.set_open_handshake_timeout(2500);
-            rair_server.set_close_handshake_timeout(2500);
+            roa_server.set_fail_handler(bind(&on_fail, &roa_server, ::_1));
+            roa_server.set_open_handler(bind(&on_open, cref(quit), ::_1));
+            roa_server.set_close_handler(bind(&on_close, &roa_server, ::_1));
+            roa_server.set_tls_init_handler(bind(&on_tls_init,MOZILLA_INTERMEDIATE,::_1));
+            roa_server.set_pong_timeout(2500);
+            roa_server.set_open_handshake_timeout(2500);
+            roa_server.set_close_handshake_timeout(2500);
 
 
-            rair_server.listen(config.port);
+            roa_server.listen(config.port);
 
             // Start the server accept loop
-            rair_server.start_accept();
+            roa_server.start_accept();
             init_done = true;
 
             // Start the ASIO io_service run loop
-            rair_server.run();
+            roa_server.run();
         } catch (websocketpp::exception const & e) {
             spdlog::error("[websocket++] {}", e.what());
             quit = true;

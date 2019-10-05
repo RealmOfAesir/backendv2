@@ -1,5 +1,5 @@
 /*
-    Land of the Rair
+    Realm of Aesir
     Copyright (C) 2019  Michael de Lang
 
     This program is free software: you can redistribute it and/or modify
@@ -209,7 +209,7 @@ namespace lotr {
     };
 
     struct spawner_script {
-        uint32_t id;
+        string tag;
         uint32_t respawn_rate;
         uint32_t initial_spawn;
         uint32_t max_creatures;
@@ -231,7 +231,7 @@ namespace lotr {
         vector<vector<npc_path>> paths;
         vector<string> npc_ai_settings;
 
-        spawner_script() : id(), respawn_rate(), initial_spawn(), max_creatures(), spawn_radius(), random_walk_radius(), leash_radius(), elite_tick_cap(), max_spawn(), loc(),
+        spawner_script() : tag(), respawn_rate(), initial_spawn(), max_creatures(), spawn_radius(), random_walk_radius(), leash_radius(), elite_tick_cap(), max_spawn(), loc(),
         should_be_active(), can_slow_down(), should_serialize(), always_spawn(), require_dead_to_respawn(), do_initial_spawn_immediately(), npc_ids(), paths(), npc_ai_settings() {}
     };
 

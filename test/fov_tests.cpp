@@ -1,5 +1,5 @@
 /*
-    Land of the Rair
+    Realm of Aesir
     Copyright (C) 2019  Michael de Lang
 
     This program is free software: you can redistribute it and/or modify
@@ -172,18 +172,22 @@ TEST_CASE("fov tests") {
         auto loc3 = make_tuple(0, 8);
         auto loc4 = make_tuple(8, 8);
 
+        spdlog::info("bottom left");
         auto fov = compute_fov_restrictive_shadowcasting(m, loc1, false);
         bitset<power(fov_diameter)> check_fov("111110000111110000111110000111110000111110000000000000000000000000000000000000000"s);
         REQUIRE(fov == check_fov);
 
+        spdlog::info("bottom right");
         fov = compute_fov_restrictive_shadowcasting(m, loc2, false);
         check_fov = bitset<power(fov_diameter)>("000011111000011111000011111000011111000011111000000000000000000000000000000000000"s);
         REQUIRE(fov == check_fov);
 
+        spdlog::info("top right");
         fov = compute_fov_restrictive_shadowcasting(m, loc3, false);
         check_fov = bitset<power(fov_diameter)>("000000000000000000000000000000000000111110000111110000111110000111110000111110000"s);
         REQUIRE(fov == check_fov);
 
+        spdlog::info("top left");
         fov = compute_fov_restrictive_shadowcasting(m, loc4, false);
         check_fov = bitset<power(fov_diameter)>("000000000000000000000000000000000000000011111000011111000011111000011111000011111"s);
         REQUIRE(fov == check_fov);

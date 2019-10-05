@@ -1,5 +1,5 @@
 /*
-    Land of the Rair
+    Realm of Aesir
     Copyright (C) 2019 Michael de Lang
 
     This program is free software: you can redistribute it and/or modify
@@ -39,8 +39,6 @@
 #ifdef TEST_CODE
 #include "../../../test/custom_server.h"
 #endif
-
-constexpr uint32_t crypto_pwhash_argon2id_MEMLIMIT_rair = 33554432U;
 
 using namespace std;
 
@@ -110,7 +108,7 @@ namespace lotr {
                                   msg->password.c_str(),
                                   msg->password.length(),
                                   crypto_pwhash_argon2id_OPSLIMIT_SENSITIVE,
-                                  crypto_pwhash_argon2id_MEMLIMIT_rair) != 0) {
+                                  crypto_pwhash_argon2id_MEMLIMIT_INTERACTIVE) != 0) {
                 spdlog::error("Registering user, but out of memory?");
                 s->send(user_data->ws, "server error", websocketpp::frame::opcode::value::TEXT);
                 return;

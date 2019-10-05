@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project(lotr_backend)
+project(roa_backend)
 #set(CMAKE_CXX_STANDARD 17)
 #set(CMAKE CXX STANDARD REQUIRED ON)
 #set(CMAKE_CXX_EXTENSIONS OFF)
@@ -26,20 +26,20 @@ set(CMAKE_CXX_FLAGS_MINSIZEREL "-Os -DNDEBUG -mavx")
 
 file(GLOB_RECURSE PROJECT_SOURCES ${PROJECT_SOURCE_DIR}/src/*.cpp)
 file(GLOB SPDLOG_SOURCE ${EXTERNAL_DIR}/spdlog/src/spdlog.cpp)
-add_executable(lotr_backend ${SPDLOG_SOURCE} ${PROJECT_SOURCES})
+add_executable(roa_backend ${SPDLOG_SOURCE} ${PROJECT_SOURCES})
 
 file(GLOB_RECURSE PROJECT_SOURCES_WITHOUT_MAIN ${PROJECT_SOURCE_DIR}/src/*.cpp)
 list(REMOVE_ITEM PROJECT_SOURCES_WITHOUT_MAIN "${PROJECT_SOURCE_DIR}/src/main.cpp")
 file(GLOB_RECURSE PROJECT_TEST_SOURCES ${PROJECT_SOURCE_DIR}/test/*.cpp)
-add_executable(lotr_test ${SPDLOG_SOURCE} ${PROJECT_SOURCES_WITHOUT_MAIN} ${PROJECT_TEST_SOURCES})
-add_test(NAME MyTest COMMAND lotr_test)
+add_executable(roa_test ${SPDLOG_SOURCE} ${PROJECT_SOURCES_WITHOUT_MAIN} ${PROJECT_TEST_SOURCES})
+add_test(NAME MyTest COMMAND roa_test)
 
 file(GLOB_RECURSE PROJECT_SOURCES_WITHOUT_MAIN ${PROJECT_SOURCE_DIR}/src/*.cpp)
 list(REMOVE_ITEM PROJECT_SOURCES_WITHOUT_MAIN "${PROJECT_SOURCE_DIR}/src/main.cpp")
 file(GLOB PROJECT_BENCHMARK_SOURCES ${PROJECT_SOURCE_DIR}/benchmark/*.cpp ${PROJECT_SOURCE_DIR}/benchmark/benchmark_helpers/*.cpp)
-add_executable(lotr_benchmark ${SPDLOG_SOURCE} ${PROJECT_SOURCES_WITHOUT_MAIN} ${PROJECT_BENCHMARK_SOURCES})
+add_executable(roa_benchmark ${SPDLOG_SOURCE} ${PROJECT_SOURCES_WITHOUT_MAIN} ${PROJECT_BENCHMARK_SOURCES})
 
-target_compile_definitions(lotr_test PRIVATE TEST_CODE=1)
+target_compile_definitions(roa_test PRIVATE TEST_CODE=1)
 
 find_library(PQXX_LIBRARY pqxx HINTS ${EXTERNAL_DIR}/libpqxx/src/.libs)
 find_library(SODIUM_LIBRARY sodium HINTS ${EXTERNAL_DIR}/libsodium/src/libsodium/.libs)
@@ -83,42 +83,42 @@ include_directories("${EXTERNAL_DIR}/pcg-cpp/include")
 include_directories("${EXTERNAL_DIR}/concurrentqueue")
 
 
-target_link_libraries(lotr_backend PUBLIC ${PQXX_LIBRARY} -lpq)
-target_link_libraries(lotr_backend PUBLIC -lpthread -lstdc++fs)
-target_link_libraries(lotr_backend PUBLIC ${ZLIB_LIBRARIES} )
-target_link_libraries(lotr_backend PUBLIC ${OPENSSL_LIBRARIES})
-target_link_libraries(lotr_backend PUBLIC ${SODIUM_LIBRARY})
-target_link_libraries(lotr_backend PUBLIC ${XXHASH_LIBRARY})
-target_link_libraries(lotr_backend PUBLIC ${YAML_LIBRARY})
-target_link_libraries(lotr_backend PUBLIC -static-libgcc -static-libstdc++)
+target_link_libraries(roa_backend PUBLIC ${PQXX_LIBRARY} -lpq)
+target_link_libraries(roa_backend PUBLIC -lpthread -lstdc++fs)
+target_link_libraries(roa_backend PUBLIC ${ZLIB_LIBRARIES} )
+target_link_libraries(roa_backend PUBLIC ${OPENSSL_LIBRARIES})
+target_link_libraries(roa_backend PUBLIC ${SODIUM_LIBRARY})
+target_link_libraries(roa_backend PUBLIC ${XXHASH_LIBRARY})
+target_link_libraries(roa_backend PUBLIC ${YAML_LIBRARY})
+target_link_libraries(roa_backend PUBLIC -static-libgcc -static-libstdc++)
 
-target_link_libraries(lotr_test PUBLIC ${PQXX_LIBRARY} -lpq)
-target_link_libraries(lotr_test PUBLIC -lpthread -lstdc++fs)
-target_link_libraries(lotr_test PUBLIC ${ZLIB_LIBRARIES} )
-target_link_libraries(lotr_test PUBLIC ${OPENSSL_LIBRARIES})
-target_link_libraries(lotr_test PUBLIC ${SODIUM_LIBRARY})
-target_link_libraries(lotr_test PUBLIC ${XXHASH_LIBRARY})
-target_link_libraries(lotr_test PUBLIC ${YAML_LIBRARY})
-target_link_libraries(lotr_test PUBLIC -static-libgcc -static-libstdc++)
+target_link_libraries(roa_test PUBLIC ${PQXX_LIBRARY} -lpq)
+target_link_libraries(roa_test PUBLIC -lpthread -lstdc++fs)
+target_link_libraries(roa_test PUBLIC ${ZLIB_LIBRARIES} )
+target_link_libraries(roa_test PUBLIC ${OPENSSL_LIBRARIES})
+target_link_libraries(roa_test PUBLIC ${SODIUM_LIBRARY})
+target_link_libraries(roa_test PUBLIC ${XXHASH_LIBRARY})
+target_link_libraries(roa_test PUBLIC ${YAML_LIBRARY})
+target_link_libraries(roa_test PUBLIC -static-libgcc -static-libstdc++)
 
-target_link_libraries(lotr_benchmark PUBLIC ${PQXX_LIBRARY} -lpq)
-target_link_libraries(lotr_benchmark PUBLIC -lpthread -lstdc++fs)
-target_link_libraries(lotr_benchmark PUBLIC ${ZLIB_LIBRARIES} )
-target_link_libraries(lotr_benchmark PUBLIC ${OPENSSL_LIBRARIES})
-target_link_libraries(lotr_benchmark PUBLIC ${SODIUM_LIBRARY})
-target_link_libraries(lotr_benchmark PUBLIC ${XXHASH_LIBRARY})
-target_link_libraries(lotr_benchmark PUBLIC ${YAML_LIBRARY})
-target_link_libraries(lotr_benchmark PUBLIC -static-libgcc -static-libstdc++)
+target_link_libraries(roa_benchmark PUBLIC ${PQXX_LIBRARY} -lpq)
+target_link_libraries(roa_benchmark PUBLIC -lpthread -lstdc++fs)
+target_link_libraries(roa_benchmark PUBLIC ${ZLIB_LIBRARIES} )
+target_link_libraries(roa_benchmark PUBLIC ${OPENSSL_LIBRARIES})
+target_link_libraries(roa_benchmark PUBLIC ${SODIUM_LIBRARY})
+target_link_libraries(roa_benchmark PUBLIC ${XXHASH_LIBRARY})
+target_link_libraries(roa_benchmark PUBLIC ${YAML_LIBRARY})
+target_link_libraries(roa_benchmark PUBLIC -static-libgcc -static-libstdc++)
 
 
 add_custom_command(
-        TARGET lotr_backend POST_BUILD
+        TARGET roa_backend POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_SOURCE_DIR}/assets/
         ${CMAKE_BINARY_DIR}/assets)
 
 add_custom_command(
-        TARGET lotr_test POST_BUILD
+        TARGET roa_test POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${CMAKE_SOURCE_DIR}/assets/
         ${CMAKE_BINARY_DIR}/assets)

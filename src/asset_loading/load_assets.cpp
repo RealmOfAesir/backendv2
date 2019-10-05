@@ -1,5 +1,5 @@
 /*
-    Land of the Rair
+    Realm of Aesir
     Copyright (C) 2019  Michael de Lang
 
     This program is free software: you can redistribute it and/or modify
@@ -22,28 +22,22 @@
 #include "load_item.h"
 #include "load_npc.h"
 #include "load_map.h"
+#include "load_spawners.h"
 #include <game_logic/random_helper.h>
 #include <game_logic/logic_helpers.h>
 
 using namespace std;
 using namespace lotr;
 
-#define NPC_STRING_FIELD(x) if(npc_node[ #x ]) { npc. x = npc_node[ #x ].as<string>(); }
-#define NPC_UINT_FIELD(x) if(npc_node[ #x ]) { npc. x = npc_node[ #x ].as<uint32_t>(); }
-#define NPC_BOOL_FIELD(x) if(npc_node[ #x ]) { npc. x = npc_node[ #x ].as<bool>(); }
-
 void lotr::load_assets(entt::registry &registry, atomic<bool> const &quit) {
     uint32_t item_count = 0;
     uint32_t npc_count = 0;
+    uint32_t spawner_count = 0;
     uint32_t map_count = 0;
     uint32_t entity_count = 0;
     auto items_loading_start = chrono::system_clock::now();
-    for(auto& p: filesystem::recursive_directory_iterator("assets/items")) {
-        if(!p.is_regular_file() || quit) {
-            continue;
-        }
-
-        auto items = load_global_items_from_file(p.path().string());
+    {
+        auto items = load_global_items_from_file("assets/_output/items.json");
 
         for(auto &item: items) {
             auto new_entity = registry.create();
@@ -53,17 +47,23 @@ void lotr::load_assets(entt::registry &registry, atomic<bool> const &quit) {
     }
 
     auto npcs_loading_start = chrono::system_clock::now();
-    for(auto& p: filesystem::recursive_directory_iterator("assets/npcs")) {
-        if(!p.is_regular_file() || quit) {
-            continue;
-        }
-
-        auto npcs = load_global_npcs_from_file(p.path().string());
+    {
+        auto npcs = load_global_npcs_from_file("assets/_output/npcs.json");
 
         for(auto &npc: npcs) {
             auto new_entity = registry.create();
             registry.assign<global_npc_component>(new_entity, move(npc));
             npc_count++;
+        }
+    }
+
+    auto spawners_loading_start = chrono::system_clock::now();
+    {
+        auto spawners = load_global_spawners_from_file("assets/_output/spawners.json", registry);
+        for(auto &spawner : spawners) {
+            auto new_entity = registry.create();
+            registry.assign<spawner_script>(new_entity, move(spawner));
+            spawner_count++;
         }
     }
 
@@ -190,7 +190,8 @@ void lotr::load_assets(entt::registry &registry, atomic<bool> const &quit) {
     auto loading_end = chrono::system_clock::now();
     spdlog::info("[{}] {:n} items loaded in {:n} µs", __FUNCTION__, item_count, chrono::duration_cast<chrono::microseconds>(npcs_loading_start - items_loading_start).count());
     spdlog::info("[{}] {:n} npcs loaded in {:n} µs", __FUNCTION__, npc_count, chrono::duration_cast<chrono::microseconds>(maps_loading_start - npcs_loading_start).count());
-    spdlog::info("[{}] {:n} maps loaded in {:n} µs", __FUNCTION__, map_count, chrono::duration_cast<chrono::microseconds>(entity_spawning_start - maps_loading_start).count());
+    spdlog::info("[{}] {:n} spawners loaded in {:n} µs", __FUNCTION__, spawner_count, chrono::duration_cast<chrono::microseconds>(spawners_loading_start - maps_loading_start).count());
+    spdlog::info("[{}] {:n} maps loaded in {:n} µs", __FUNCTION__, map_count, chrono::duration_cast<chrono::microseconds>(entity_spawning_start - spawners_loading_start).count());
     spdlog::info("[{}] {:n} entities spawned in {:n} µs", __FUNCTION__, entity_count, chrono::duration_cast<chrono::microseconds>(loading_end - entity_spawning_start).count());
     spdlog::info("[{}] everything loaded in {:n} µs", __FUNCTION__, chrono::duration_cast<chrono::microseconds>(loading_end - items_loading_start).count());
 }

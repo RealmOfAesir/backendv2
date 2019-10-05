@@ -1,5 +1,5 @@
 /*
-    Land of the Rair
+    Realm of Aesir
     Copyright (C) 2019  Michael de Lang
 
     This program is free software: you can redistribute it and/or modify
@@ -40,7 +40,7 @@ uint32_t spawner_id_counter = 0;
 optional<spawner_script> create_spawner_script_for_npc(rapidjson::Value &current_object, uint32_t x, uint32_t y, uint32_t first_gid) {
     spawner_script script;
 
-    script.id = spawner_id_counter++;
+    //script.id = spawner_id_counter++;
     script.leash_radius = -1;
     script.initial_spawn = 1;
     script.max_creatures = 1;
@@ -72,7 +72,7 @@ optional<spawner_script> get_spawner_script(string const &script_file, uint32_t 
 
     YAML::Node tree = YAML::Load(env_contents.value());
 
-    script.id = spawner_id_counter++;
+    //script.id = spawner_id_counter++;
     script.respawn_rate = tree["respawnRate"].as<uint32_t>();
     script.initial_spawn = tree["initialSpawn"].as<uint32_t>();
     script.max_creatures = tree["maxCreatures"].as<uint32_t>();
@@ -227,7 +227,7 @@ optional<map_component> lotr::load_map_from_file(const string &file, entt::regis
     d.Parse(env_contents->c_str(), env_contents->size());
 
     if (d.HasParseError() || !d.IsObject()) {
-        spdlog::error("[{}] deserialize config.json failed", __FUNCTION__);
+        spdlog::error("[{}] deserialize {} failed", __FUNCTION__, file);
         return {};
     }
 

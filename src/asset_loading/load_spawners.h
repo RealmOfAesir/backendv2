@@ -1,6 +1,6 @@
 /*
     Realm of Aesir
-    Copyright (C) 2019 Michael de Lang
+    Copyright (C) 2019  Michael de Lang
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published by
@@ -18,27 +18,13 @@
 
 #pragma once
 
-#include <string>
-#include <optional>
-#include <rapidjson/document.h>
-#include "../message.h"
+#include <vector>
+#include <ecs/components.h>
+#include <entt/entity/registry.hpp>
 
 using namespace std;
 
 namespace lotr {
-    struct message_request : public message {
-        message_request(string content) noexcept;
-
-        ~message_request() noexcept = default;
-
-        [[nodiscard]]
-        string serialize() const override;
-
-        [[nodiscard]]
-        static optional<message_request> deserialize(rapidjson::Document const &d);
-
-        string content;
-
-        static string const type;
-    };
+    [[nodiscard]]
+    vector<spawner_script> load_global_spawners_from_file(const string &file, entt::registry &registry);
 }

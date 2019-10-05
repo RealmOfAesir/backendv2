@@ -1,5 +1,5 @@
 /*
-    Land of the Rair
+    Realm of Aesir
     Copyright (C) 2019 Michael de Lang
 
     This program is free software: you can redistribute it and/or modify
@@ -96,7 +96,7 @@ void lotr::remove_dead_npcs(vector<npc_component> &npcs) noexcept {
 }
 
 void lotr::fill_spawners(map_component const &m, vector<npc_component> &npcs, entt::registry &registry) {
-    lotr_flat_map<uint32_t, tuple<uint32_t, spawner_script*>> spawner_npc_counter;
+    lotr_flat_map<string, tuple<uint32_t, spawner_script*>> spawner_npc_counter;
 
     for(auto &npc : npcs) {
         if(npc.stats[stat_hp] <= 0) {
@@ -104,12 +104,12 @@ void lotr::fill_spawners(map_component const &m, vector<npc_component> &npcs, en
         }
 
         if(npc.spawner) {
-            auto spawner_it = spawner_npc_counter.find(npc.spawner->id);
+            auto spawner_it = spawner_npc_counter.find(npc.spawner->tag);
 
             if (spawner_it == end(spawner_npc_counter)) {
                 get<0>(spawner_it->second)++;
             } else {
-                spawner_npc_counter[npc.spawner->id] = make_tuple(1, npc.spawner);
+                spawner_npc_counter[npc.spawner->tag] = make_tuple(1, npc.spawner);
             }
         }
     }
