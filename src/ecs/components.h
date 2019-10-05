@@ -106,16 +106,14 @@ namespace lotr {
         uint32_t level;
     };
 
-    struct global_item_component {
+    struct item_component {
         string name;
         string desc;
         string type;
-        //string required_quest;
-        //string required_alignment;
-        uint64_t quality;
-        uint64_t enchant_level;
         uint64_t value;
         uint64_t sprite;
+        uint64_t quality;
+        uint64_t enchant_level;
         uint64_t required_level;
         uint64_t tier;
         bool binds;
@@ -128,20 +126,6 @@ namespace lotr {
         vector<stat_component> stats;
         vector<random_stat_component> random_stats;
     };
-
-    struct item_component {
-        string name;
-        string desc;
-        uint64_t value;
-        uint64_t sprite;
-        vector<stat_component> stats;
-    };
-
-    /*struct location_component {
-        string map_name;
-        uint32_t x;
-        uint32_t y;
-    };*/
 
     struct global_npc_component {
         string name;
@@ -166,7 +150,6 @@ namespace lotr {
         vector<random_stat_component> random_stats;
         vector<item_component> items;
         vector<skill_component> skills;
-        //location_component location;
     };
 
     struct spawner_npc_id {
